@@ -3,6 +3,7 @@ import { PORTFOLIO_DATA } from '../data/portfolio.ts';
 import {
   ArrowDown,
   FileDown,
+  FileText,
   Github,
   Linkedin,
   Mail,
@@ -14,7 +15,11 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 
-export const Hero: React.FC = () => {
+interface HeroProps {
+  onOpenResumeModal?: () => void;
+}
+
+export const Hero: React.FC<HeroProps> = ({ onOpenResumeModal }) => {
   const [showPhoto, setShowPhoto] = useState(true);
 
   return (
@@ -68,13 +73,22 @@ export const Hero: React.FC = () => {
                 <ArrowDown className="w-4 h-4" />
               </a>
 
+              <button
+                onClick={onOpenResumeModal}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl font-semibold text-sm bg-[#101722] text-slate-200 border border-slate-700 hover:border-[#00D4C7]/60 hover:text-white transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00D4C7] cursor-pointer"
+              >
+                <FileText className="w-4 h-4 text-[#00D4C7]" />
+                <span>View Full Resume</span>
+              </button>
+
               <a
                 href={PORTFOLIO_DATA.personal.resumeUrl}
                 download="K_R_Sachin_Resume.pdf"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl font-semibold text-sm bg-[#101722] text-slate-200 border border-slate-700 hover:border-[#00D4C7]/60 hover:text-white transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00D4C7]"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl font-medium text-xs text-slate-400 hover:text-slate-200 bg-[#080B12] border border-slate-800 hover:border-slate-700 transition-all"
+                title="Direct PDF download"
               >
-                <FileDown className="w-4 h-4 text-[#00D4C7]" />
-                <span>Download Resume</span>
+                <FileDown className="w-4 h-4 text-[#38BDF8]" />
+                <span>Download PDF</span>
               </a>
             </div>
 
@@ -132,7 +146,7 @@ export const Hero: React.FC = () => {
 
                   <button
                     onClick={() => setShowPhoto(!showPhoto)}
-                    className="flex items-center gap-1.5 text-xs font-mono text-slate-400 hover:text-[#00D4C7] bg-[#080B12] px-2.5 py-1 rounded-md border border-slate-800 transition-colors"
+                    className="flex items-center gap-1.5 text-xs font-mono text-slate-400 hover:text-[#00D4C7] bg-[#080B12] px-2.5 py-1 rounded-md border border-slate-800 transition-colors cursor-pointer"
                     title="Toggle Photo or Abstract Avatar"
                   >
                     {showPhoto ? (

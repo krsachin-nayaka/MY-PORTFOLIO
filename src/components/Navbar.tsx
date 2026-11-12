@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { PORTFOLIO_DATA } from '../data/portfolio.ts';
-import { Menu, X, ArrowUpRight, FileDown } from 'lucide-react';
+import { Menu, X, ArrowUpRight, FileDown, FileText } from 'lucide-react';
 
-export const Navbar: React.FC = () => {
+interface NavbarProps {
+  onOpenResumeModal?: () => void;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({ onOpenResumeModal }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -20,6 +24,7 @@ export const Navbar: React.FC = () => {
     { label: 'Projects', href: '#projects' },
     { label: 'Education', href: '#education' },
     { label: 'Certifications', href: '#certifications' },
+    { label: 'Resume', href: '#resume' },
     { label: 'Contact', href: '#contact' },
   ];
 
@@ -27,7 +32,7 @@ export const Navbar: React.FC = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-[#080B12]/85 backdrop-blur-md border-b border-slate-800/80 shadow-lg shadow-black/40'
+          ? 'bg-[#080B12]/90 backdrop-blur-md border-b border-slate-800/80 shadow-lg shadow-black/40'
           : 'bg-transparent border-b border-transparent'
       }`}
     >
@@ -44,7 +49,7 @@ export const Navbar: React.FC = () => {
         </a>
 
         {/* Zone 2: 4-6 concise single-line nav links */}
-        <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-slate-300">
+        <nav className="hidden lg:flex items-center gap-7 text-sm font-medium text-slate-300">
           {navLinks.map((link) => (
             <a
               key={link.label}
@@ -57,15 +62,15 @@ export const Navbar: React.FC = () => {
         </nav>
 
         {/* Zone 3: 1 primary action */}
-        <div className="hidden md:flex items-center gap-3 shrink-0">
-          <a
-            href={PORTFOLIO_DATA.personal.resumeUrl}
-            download="K_R_Sachin_Resume.pdf"
-            className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-slate-200 bg-[#101722] border border-slate-700/80 rounded-lg hover:border-[#00D4C7]/50 hover:text-white transition-all whitespace-nowrap shrink-0"
+        <div className="hidden sm:flex items-center gap-3 shrink-0">
+          <button
+            onClick={onOpenResumeModal}
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-slate-200 bg-[#101722] border border-slate-700/80 rounded-lg hover:border-[#00D4C7]/60 hover:text-white transition-all whitespace-nowrap shrink-0 cursor-pointer"
+            title="Open Resume Document"
           >
-            <FileDown className="w-3.5 h-3.5 text-[#00D4C7]" />
+            <FileText className="w-3.5 h-3.5 text-[#00D4C7]" />
             <span>Resume</span>
-          </a>
+          </button>
           <a
             href="#contact"
             className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-[#080B12] bg-[#00D4C7] hover:bg-[#38BDF8] rounded-lg transition-colors whitespace-nowrap shrink-0 shadow-sm shadow-[#00D4C7]/20"
@@ -76,15 +81,14 @@ export const Navbar: React.FC = () => {
         </div>
 
         {/* Mobile Hamburger Button */}
-        <div className="flex md:hidden items-center gap-2">
-          <a
-            href={PORTFOLIO_DATA.personal.resumeUrl}
-            download="K_R_Sachin_Resume.pdf"
+        <div className="flex lg:hidden items-center gap-2">
+          <button
+            onClick={onOpenResumeModal}
             className="p-2 text-xs text-slate-300 bg-[#101722] border border-slate-800 rounded-lg hover:text-[#00D4C7]"
-            title="Download Resume"
+            title="View Resume"
           >
-            <FileDown className="w-4 h-4 text-[#00D4C7]" />
-          </a>
+            <FileText className="w-4 h-4 text-[#00D4C7]" />
+          </button>
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="p-2 text-slate-300 hover:text-white rounded-lg bg-[#101722] border border-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00D4C7]"
@@ -97,7 +101,7 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Drawer Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-[#080B12]/98 border-b border-slate-800 px-6 pt-4 pb-6 backdrop-blur-xl shadow-2xl">
+        <div className="lg:hidden bg-[#080B12]/98 border-b border-slate-800 px-6 pt-4 pb-6 backdrop-blur-xl shadow-2xl">
           <div className="flex flex-col gap-3">
             {navLinks.map((link) => (
               <a
@@ -110,18 +114,28 @@ export const Navbar: React.FC = () => {
               </a>
             ))}
             <div className="pt-3 flex flex-col gap-2">
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  onOpenResumeModal?.();
+                }}
+                className="w-full flex items-center justify-center gap-2 py-2.5 px-4 text-sm font-semibold text-slate-200 bg-[#101722] border border-slate-700 rounded-lg"
+              >
+                <FileText className="w-4 h-4 text-[#00D4C7]" />
+                <span>View Full Resume</span>
+              </button>
               <a
                 href={PORTFOLIO_DATA.personal.resumeUrl}
                 download="K_R_Sachin_Resume.pdf"
-                className="w-full flex items-center justify-center gap-2 py-2.5 px-4 text-sm font-semibold text-slate-200 bg-[#101722] border border-slate-700 rounded-lg"
+                className="w-full flex items-center justify-center gap-2 py-2 px-4 text-xs font-semibold text-slate-400 hover:text-white"
               >
-                <FileDown className="w-4 h-4 text-[#00D4C7]" />
-                <span>Download Resume</span>
+                <FileDown className="w-3.5 h-3.5 text-[#00D4C7]" />
+                <span>Direct PDF Download</span>
               </a>
               <a
                 href="#contact"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="w-full flex items-center justify-center gap-2 py-2.5 px-4 text-sm font-semibold text-[#080B12] bg-[#00D4C7] rounded-lg"
+                className="w-full flex items-center justify-center gap-2 py-2.5 px-4 text-sm font-semibold text-[#080B12] bg-[#00D4C7] rounded-lg mt-1"
               >
                 <span>Let's Connect</span>
                 <ArrowUpRight className="w-4 h-4" />
